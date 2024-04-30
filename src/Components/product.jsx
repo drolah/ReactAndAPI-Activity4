@@ -9,7 +9,11 @@ function Products(token) {
   }, []);
 
   const fetchData = () => {
-    fetch('http://localhost:3000/products/')
+    fetch('http://localhost:3000/products/',{
+        headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+    })
       .then(response => response.json())
       .then(data => {
         setProduct(data.products);
@@ -21,7 +25,11 @@ function Products(token) {
 
 
   return (
-    <div className="pokemons">
+    <div>
+      <header className="headerBtn">  
+          <a href ="/dashboard" >Back</a>
+      </header>
+    <div className="products">
           {product.map(products => (
             <Card
               key={products.id}
@@ -31,6 +39,7 @@ function Products(token) {
               price={products.price}
             />
           ))}
+        </div>
         </div>
   );
 }

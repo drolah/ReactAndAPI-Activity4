@@ -6,8 +6,21 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;
-  overflow: hidden;
+  background-attachment: fixed;
 }
+
+a {
+  margin-left: 20px;
+  background-color: #f5f5f5;
+}
+
+.headerBtn {
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+
+
 
 
 
@@ -180,22 +193,42 @@ product
     border: 1px solid #000000;
     padding: 20px;
     margin: 5px;
+    margin-top: 20px;
     width: 200px;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     background-color: rgb(226, 247, 253);
   }
   
-  .product-card img {
+  .product-card .image {
     width: 100px;
     height: 100px;
     margin-bottom: 20px;
   }
-  
-  .product-details {
-    text-align: center;
+
+  .product-card .image2 {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    cursor: pointer;
   }
+
+  .product-card .images {
+    margin-left: 70%;
+    margin-bottom: 10px;
+  }
+
+  .orderBtn {
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    
+    background-color: aqua;
+  }
+
 
   /*
 ======================================================================================
@@ -217,7 +250,11 @@ add product
   top: 50%; /* Move container 50% down from the top */
   left: 50%; /* Move container 50% from the left */
   transform: translate(-50%, -50%); /* Center the container */
-  text-align: center;
+  text-align: left;
+}
+
+.add-imageInput{
+  margin-left: 15%;
 }
 
 
@@ -226,6 +263,11 @@ add product
   height: 20px;
   font-size: 10px;
   margin: 5px;
+}
+
+input[type="number"] {
+  height: 30px;
+  box-sizing: border-box;
 }
 
 .add-priceInput {
@@ -249,9 +291,84 @@ add product
   color: white;
   border: none;
   border-radius: 5px;
-  margin-left: 7%;
+  margin-left: 30%;
 }
 
 .add-button:hover {
   background-color:rgb(201, 3, 236);
 }
+
+
+
+/*
+=================================================================
+modal
+*/
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  z-index: 100; /* Ensure the overlay is above other content */
+}
+
+.order-modal {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  z-index: 101; /* Ensure the modal is above the overlay */
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+input[type="number"] {
+  width: 100px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-btn, .cancel-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.order-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.order-btn:hover, .cancel-btn:hover {
+  opacity: 0.8;
+}
+
+

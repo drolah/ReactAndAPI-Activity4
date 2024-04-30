@@ -1,33 +1,52 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-function AddProduct({ setToken }) {
+function UpdateProduct() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetch(`http://localhost:3000/products/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        setName(data.product.name); // Assuming product name is stored in `name` property of the response
+        setPrice(data.product.price); // Assuming product price is stored in `price` property of the response
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validation (optional, add checks as needed)
-    if (!name || !price || !image) {
-      alert('Please fill in all required fields (name, price, and image).');
+    if (!name || !price) {
+      alert('Please fill in all required fields (name and price).');
       return;
     }
 
     try {
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('price', price);
-      formData.append('productImage', image);
+      const formData = [
+        { propName: "name", value: name },
+        { propName: "price", value: price }
+      ];
 
-      const response = await fetch('http://localhost:3000/products/', {
-        method: 'POST',
-        body: formData,
+      const response = await fetch(`http://localhost:3000/products/${id}`, {
+        method: 'PATCH',
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        },
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
@@ -35,32 +54,19 @@ function AddProduct({ setToken }) {
         navigate('/products');
       } else {
         console.error('Error:', data.message);
-        // Handle specific error messages here (optional)
       }
     } catch (error) {
       console.error('Error:', error);
-      // Handle general errors here (e.g., display an error message to the user)
     }
-  };
-
-  const handleImageChange = (e) => {
-    const reader = new FileReader();
-    const file = e.target.files[0];
-
-    reader.onloadend = () => {
-      setImage(file);
-    };
-
-    reader.readAsDataURL(file); // Optionally preview the image (add logic to display)
   };
 
   return (
     <div className="add-product-container">
       <header className="headerBtn">
-        <a href="/dashboard">Back</a>
+        <a href="/products">Back</a>
       </header>
       <div className="add-container">
-        <h2 className="add-title">Add Product</h2>
+        <h2 className="add-title">Update Product</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="add-nameLabel" htmlFor="name">
@@ -74,7 +80,7 @@ function AddProduct({ setToken }) {
               name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required // Add required attribute for validation
+              required
             />
           </div>
           <div className="form-group">
@@ -89,24 +95,11 @@ function AddProduct({ setToken }) {
               name="price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              required // Add required attribute for validation
-            />
-          </div>
-          <div className="form-group">
-            <label className="add-imageLabel" htmlFor="image">
-              Product Image:
-            </label>
-            <input
-              className="add-imageInput"
-              type="file"
-              id="image"
-              name="image"
-              onChange={handleImageChange}
               required
             />
           </div>
           <button className="add-button" type="submit">
-            Add
+            Update
           </button>
         </form>
       </div>
@@ -114,4 +107,4 @@ function AddProduct({ setToken }) {
   );
 }
 
-export default AddProduct;
+export default UpdateProduct;
